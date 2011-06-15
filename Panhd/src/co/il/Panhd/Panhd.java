@@ -22,7 +22,7 @@ public class Panhd extends Activity {
 	private Uri outputFileUri;
 	
 	
-    @Override 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -47,17 +47,14 @@ public class Panhd extends Activity {
 			header.setText("Sending picture");
 			
 			// Email the picture
-			Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+			Intent emailIntent = new Intent(Intent.ACTION_SEND);
+			//emailIntent .setType("plain/text");
+			emailIntent.setType("image/jpeg");
 			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"aviadpi@gmail.com"});
 			emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Panh'd!");
 			emailIntent.putExtra(Intent.EXTRA_TEXT, "Hey Aviad, check out my new Panh'd!");
-			//intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(outputFileUri.toString()));
-			//intent.setType("vnd.android.cursor.dir/email"); 
-			emailIntent.setType("plain/text");
+			emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(outputFileUri.toString()));
 			startActivity(Intent.createChooser(emailIntent, "Send Email"));
-			
 		}
 	}
-    
-    
 }
