@@ -43,16 +43,18 @@ public class Panhd extends Activity {
 		if (requestCode == TAKE_PICTURE){
 //			Toast.makeText(getApplicationContext(), outputFileUri.toString(), 1);
 //			Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-		//	TextView header = (TextView) get
+			TextView header = (TextView) this.findViewById(R.id.header);
+			header.setText("Sending picture");
 			
 			// Email the picture
-			Intent intent = new Intent(Intent.ACTION_SEND);
-			intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"aviadpi@gmail.com"});
-			intent.putExtra(Intent.EXTRA_SUBJECT, "New Panh'd!");
-			intent.putExtra(Intent.EXTRA_TEXT, "Hey Aviad, check out my new Panh'd!");
+			Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"aviadpi@gmail.com"});
+			emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Panh'd!");
+			emailIntent.putExtra(Intent.EXTRA_TEXT, "Hey Aviad, check out my new Panh'd!");
 			//intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(outputFileUri.toString()));
-			intent.setType("vnd.android.cursor.dir/email"); 
-			startActivity(Intent.createChooser(intent, "Send Email"));
+			//intent.setType("vnd.android.cursor.dir/email"); 
+			emailIntent.setType("plain/text");
+			startActivity(Intent.createChooser(emailIntent, "Send Email"));
 			
 		}
 	}
