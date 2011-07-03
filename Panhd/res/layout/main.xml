@@ -3,11 +3,72 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background = "@drawable/background2" 
     >
-    <TextView 
-    android:text="Time for some Panh'ding...\nStarting the Camera" 
-    android:id="@+id/header" 
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content"
-    android:gravity="center"></TextView>
+		    
+	    <LinearLayout 
+	    	android:id="@+id/mainlinearLayout1" 
+	    	android:layout_height="wrap_content" 
+	    	android:layout_width="wrap_content"
+	    	android:layout_gravity="center"
+	    	android:paddingBottom="20dp"
+	    	android:paddingTop="100dp"
+	    	>
+	        
+	        <Button 
+	        	android:layout_height="wrap_content" 
+	        	android:text="  Start The Camera" 
+	        	android:textSize="15dp" 
+	        	android:layout_weight="1"
+	        	android:layout_width="wrap_content" 
+	        	android:drawableLeft="@drawable/camera48" 
+	        	android:id="@+id/mainStartButton" 
+	        	android:typeface="serif" 
+	        	android:layout_gravity="center"
+	        	></Button>
+	        	
+	    </LinearLayout>
+	    <LinearLayout 
+	    	android:id="@+id/mainlinearLayout2" 
+	    	android:layout_height="wrap_content" 
+	    	android:layout_width="wrap_content"
+	    	android:layout_gravity="center"
+	    	>
+	        <Button 
+	        	android:layout_height="wrap_content" 
+	        	android:text="  Go to my Album!" 
+	        	android:textSize="15dp" 
+	        	android:layout_weight="1"
+	        	android:layout_width="wrap_content" 
+	        	android:drawableLeft="@drawable/icon" 
+	        	android:id="@+id/mainAlbumLink" 
+	        	android:typeface="serif" 
+	        	android:layout_gravity="center"
+				android:padding="10dp" 
+	        	></Button>
+	    </LinearLayout>
+	
+	<RelativeLayout 
+		android:layout_height="wrap_content" 
+		android:layout_width="match_parent" 
+		android:id="@+id/mainrelativeLayout1"
+		android:layout_gravity="bottom"
+		android:layout_weight="1"
+		>
+		<ImageButton 
+			android:paddingRight="10dp" 
+			android:background="@drawable/transparent2" 
+			android:layout_height="wrap_content" 
+			android:layout_width="wrap_content" 
+			android:id="@+id/mainAboutButton" 
+			android:src="@drawable/infobutton" 
+			android:padding="50dp" 
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			></ImageButton>
+			
+	</RelativeLayout>
+    
+    
 </LinearLayout>
+     

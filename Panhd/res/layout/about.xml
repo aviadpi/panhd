@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_gravity = "center"
+  android:gravity = "center"
+  android:orientation="vertical">
+    <TextView 
+    	android:text="About Panh'd:" 
+    	android:id="@+id/abouttextView1" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"
+    	android:gravity = "center" 
+    	android:drawableLeft = "@drawable/info"
+    	android:textSize  = "30dp"
+	    android:textColor = "#ddffffff"
+	    android:textStyle = "bold"
+	    android:typeface  = "serif"
+	    android:paddingRight = "15dp"
+    	android:paddingLeft = "15dp"
+	    android:paddingBottom = "30dp"
+	    android:paddingTop = "20dp"
+    	></TextView>
+  
+  
+    <TextView 
+    	android:text="You Just Got Panh'd!\n\nby: Aviad Panhi\n\nAll rights reserved bla bla bla..."
+    	android:id="@+id/aboutTextView1" 
+    	android:layout_width="wrap_content"
+    	android:gravity = "center" 
+    	android:drawableLeft = "@drawable/me"
+    	android:layout_height="wrap_content"
+    	android:paddingRight = "15dp"
+    	android:paddingLeft = "15dp"
+    	android:typeface  = "serif"
+    	android:layout_marginBottom="20dp">
+    	</TextView>
+    
+    <Button 
+    	android:text="Close" 
+    	android:id="@+id/aboutCloseButton1" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content"
+    	android:typeface  = "serif"
+    	></Button>
+    	
+</LinearLayout>
+

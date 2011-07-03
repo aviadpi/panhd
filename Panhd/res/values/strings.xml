@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, Panhd!</string>
-    <string name="app_name">YouJustGotPanhd</string>
+    <string name="app_name">Panhd</string>
+    <string name="Panhd">Panhd</string>
 </resources>
