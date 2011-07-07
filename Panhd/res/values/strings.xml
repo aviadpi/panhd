@@ -3,4 +3,7 @@
     <string name="hello">Hello World, Panhd!</string>
     <string name="app_name">Panhd</string>
     <string name="Panhd">Panhd</string>
+    <string name="email">Aviadpi@gmail.com</string>
+    <string name="camerabutton">  Take a picture and\nEmail it to me!</string>
+    <string name="emailunderlined"><u>Aviadpi@gmail.com</u></string>
 </resources>

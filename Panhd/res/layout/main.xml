@@ -8,45 +8,28 @@
 		    
 	    <LinearLayout 
 	    	android:id="@+id/mainlinearLayout1" 
-	    	android:layout_height="wrap_content" 
+	    	android:layout_height="fill_parent" 
 	    	android:layout_width="wrap_content"
 	    	android:layout_gravity="center"
 	    	android:paddingBottom="20dp"
 	    	android:paddingTop="100dp"
+	    	android:layout_weight="1"
 	    	>
 	        
 	        <Button 
 	        	android:layout_height="wrap_content" 
-	        	android:text="  Start The Camera" 
+	        	android:text="@string/camerabutton" 
 	        	android:textSize="15dp" 
 	        	android:layout_weight="1"
 	        	android:layout_width="wrap_content" 
-	        	android:drawableLeft="@drawable/camera48" 
+	        	android:drawableLeft="@drawable/camera" 
 	        	android:id="@+id/mainStartButton" 
 	        	android:typeface="serif" 
-	        	android:layout_gravity="center"
+	        	android:layout_gravity="center|bottom"
 	        	></Button>
 	        	
 	    </LinearLayout>
-	    <LinearLayout 
-	    	android:id="@+id/mainlinearLayout2" 
-	    	android:layout_height="wrap_content" 
-	    	android:layout_width="wrap_content"
-	    	android:layout_gravity="center"
-	    	>
-	        <Button 
-	        	android:layout_height="wrap_content" 
-	        	android:text="  Go to my Album!" 
-	        	android:textSize="15dp" 
-	        	android:layout_weight="1"
-	        	android:layout_width="wrap_content" 
-	        	android:drawableLeft="@drawable/icon" 
-	        	android:id="@+id/mainAlbumLink" 
-	        	android:typeface="serif" 
-	        	android:layout_gravity="center"
-				android:padding="10dp" 
-	        	></Button>
-	    </LinearLayout>
+	   
 	
 	<RelativeLayout 
 		android:layout_height="wrap_content" 
@@ -61,7 +44,7 @@
 			android:layout_height="wrap_content" 
 			android:layout_width="wrap_content" 
 			android:id="@+id/mainAboutButton" 
-			android:src="@drawable/infobutton" 
+			android:src="@drawable/infobutton2" 
 			android:padding="50dp" 
 			android:layout_alignParentBottom="true"
 			android:layout_alignParentRight="true"

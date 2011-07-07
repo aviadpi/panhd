@@ -7,7 +7,7 @@
   android:gravity = "center"
   android:orientation="vertical">
     <TextView 
-    	android:text="About Panh'd:" 
+    	android:text=" About Panh'd:" 
     	android:id="@+id/abouttextView1" 
     	android:layout_width="fill_parent" 
     	android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
   
   
     <TextView 
-    	android:text="You Just Got Panh'd!\n\nby: Aviad Panhi\n\nAll rights reserved bla bla bla..."
+    	android:text="You Just Got Panh'd!\n\nby: Aviad Panhi\n\nAll rights reserved\nbla bla bla..." 
     	android:id="@+id/aboutTextView1" 
     	android:layout_width="wrap_content"
     	android:gravity = "center" 
@@ -36,14 +36,12 @@
     	android:typeface  = "serif"
     	android:layout_marginBottom="20dp">
     	</TextView>
-    
-    <Button 
-    	android:text="Close" 
-    	android:id="@+id/aboutCloseButton1" 
-    	android:layout_width="wrap_content" 
-    	android:layout_height="wrap_content"
-    	android:typeface  = "serif"
-    	></Button>
+    	
+    <LinearLayout android:layout_height="wrap_content" android:layout_gravity = "center" android:id="@+id/aboutlinearLayout1" android:layout_width="match_parent">
+        <ImageButton android:layout_height="wrap_content" android:layout_gravity = "center" android:layout_weight = "1" android:id="@+id/emailbutton" android:padding="10dp" android:background="@drawable/transparent2" android:layout_width="wrap_content" android:src="@drawable/gmailicon72"></ImageButton>
+        <Button android:layout_width="wrap_content" android:layout_gravity = "center" android:layout_weight = "1" android:typeface="serif" android:layout_height="wrap_content" android:text="Close" android:id="@+id/aboutCloseButton1"></Button>
+        <ImageButton android:layout_height="wrap_content" android:layout_gravity = "center" android:layout_weight = "1" android:id="@+id/facebookbutton" android:padding="10dp" android:background="@drawable/transparent2" android:layout_width="wrap_content" android:src="@drawable/facebookicon72"></ImageButton>
+    </LinearLayout>
     	
 </LinearLayout>
 
