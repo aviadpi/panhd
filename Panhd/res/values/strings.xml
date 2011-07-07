@@ -6,4 +6,6 @@
     <string name="email">Aviadpi@gmail.com</string>
     <string name="camerabutton">  Take a picture and\nEmail it to me!</string>
     <string name="emailunderlined"><u>Aviadpi@gmail.com</u></string>
+    <string name="aboutInstructions">To Panh\'d someone,\nAll you need to do is to picture him sleeping, and make a funny face.\nTry it!</string>
+    <string name="abouttext">You Just Got Panh\'d!\n\nby: Aviad Panhi\n\nAll rights reserved\nbla bla bla...</string>
 </resources>

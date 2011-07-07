@@ -25,7 +25,7 @@
   
   
     <TextView 
-    	android:text="You Just Got Panh'd!\n\nby: Aviad Panhi\n\nAll rights reserved\nbla bla bla..." 
+    	android:text="@string/abouttext" 
     	android:id="@+id/aboutTextView1" 
     	android:layout_width="wrap_content"
     	android:gravity = "center" 
@@ -37,7 +37,22 @@
     	android:layout_marginBottom="20dp">
     	</TextView>
     	
-    <LinearLayout android:layout_height="wrap_content" android:layout_gravity = "center" android:id="@+id/aboutlinearLayout1" android:layout_width="match_parent">
+    <TextView 
+    	android:text="@string/aboutInstructions" 
+    	android:id="@+id/aboutInstructions" 
+    	android:padding = "15dp"
+    	android:paddingBottom = "20dp"
+    	android:gravity = "center" 
+    	android:textSize  = "15dp"
+	    android:textColor = "#ddcccccc"
+	    android:textStyle = "bold"
+	    android:typeface  = "serif"
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content"
+    	android:background = "@drawable/background" 
+    	></TextView>
+    	
+    <LinearLayout android:padding = "15dp" android:layout_height="wrap_content" android:layout_gravity = "center" android:id="@+id/aboutlinearLayout1" android:layout_width="match_parent">
         <ImageButton android:layout_height="wrap_content" android:layout_gravity = "center" android:layout_weight = "1" android:id="@+id/emailbutton" android:padding="10dp" android:background="@drawable/transparent2" android:layout_width="wrap_content" android:src="@drawable/gmailicon72"></ImageButton>
         <Button android:layout_width="wrap_content" android:layout_gravity = "center" android:layout_weight = "1" android:typeface="serif" android:layout_height="wrap_content" android:text="Close" android:id="@+id/aboutCloseButton1"></Button>
         <ImageButton android:layout_height="wrap_content" android:layout_gravity = "center" android:layout_weight = "1" android:id="@+id/facebookbutton" android:padding="10dp" android:background="@drawable/transparent2" android:layout_width="wrap_content" android:src="@drawable/facebookicon72"></ImageButton>
