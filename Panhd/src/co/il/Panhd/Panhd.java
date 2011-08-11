@@ -1,7 +1,6 @@
 package co.il.Panhd;
 
 import java.io.File;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -10,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.Display;
@@ -22,18 +22,25 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class Panhd extends Activity {
 
 	int TAKE_PICTURE = 235;
 	private Uri outputFileUri;
+	private FacebookConnector fbConnector;
+	protected Handler mFacebookHandler;
 
 	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) { 
+		
 		Display display = getWindowManager().getDefaultDisplay(); 
 		int Wpixels = display.getWidth();
 		int Hpixels = display.getHeight();
+		mFacebookHandler = new Handler();		
+		
+		fbConnector = new FacebookConnector(this, getBaseContext());
 		
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		final boolean CameraBoolean = preferences.getBoolean("startcamera", false);
@@ -83,7 +90,7 @@ public class Panhd extends Activity {
 						@Override
 						public void onClick(View v) {
 							Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-							emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"Aviadpi@gmail.com"});
+							emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getString(R.string.myemail)});
 							emailIntent.setType("*/*");
 							startActivity(emailIntent);
 						}
@@ -118,7 +125,7 @@ public class Panhd extends Activity {
 		// ** End of About Button
 
 
-		// ** Start the camera Button
+		// ** "Start the camera" Button
 		Button start = (Button) this.findViewById(R.id.mainStartButton);
 		start.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -132,8 +139,32 @@ public class Panhd extends Activity {
 		start.setMinHeight(Hpixels/4);
 		start.setMinWidth(Wpixels/2);
 		// ** End of Camera Button
+		
+		
+		
+		Button temp = (Button) this.findViewById(R.id.tempbutton1);
+		temp.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				logOutInThread();
+//				fbConnector.logout();
+			}});
+		
+		Button temp2 = (Button) this.findViewById(R.id.tempbutton2);
+		temp2.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				fbConnector.login();
+			}
+		});
+		
+		Button temp3 = (Button) this.findViewById(R.id.tempbutton3);
+		temp3.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				postMessageInThread("Yeah, it's coming...");
+			}
+		});
 	}
-
+	// ** End of OnCreate //////////////////////////////////////////////////////////////////////////////
+	
 	// ** Settings
 	@Override
 	protected void onStop(){
@@ -186,23 +217,69 @@ public class Panhd extends Activity {
 	}
 
 	// ** End of Menu
-
 	
+	// ** Facebook
+
+	private void postMessageInThread(final String msg) {
+		Thread t = new Thread() {
+			public void run() {
+
+		    	try {
+		    		fbConnector.postMessageOnWall(msg);
+					mFacebookHandler.post(mUpdateFacebookNotification);
+				} catch (Exception ex) {
+				}
+		    }
+		};
+		t.start();
+	}
+
+	private void logOutInThread() {
+		Thread t = new Thread() {
+			public void run() {
+		    	try {
+		    		fbConnector.logout();
+					mFacebookHandler.post(mUpdateFacebookLogOutNotification);
+				} catch (Exception ex) {
+				}
+		    }
+		};
+		t.start();
+	}
+	
+	   final Runnable mUpdateFacebookNotification = new Runnable() {
+	       public void run() {
+	       	Toast.makeText(getBaseContext(), getString(R.string.FbPostMsg), Toast.LENGTH_LONG).show();
+	       }
+	   };
+	   
+	   final Runnable mUpdateFacebookLogOutNotification = new Runnable() {
+	       public void run() {
+	       	Toast.makeText(getBaseContext(), getString(R.string.FbLogOut), Toast.LENGTH_LONG).show();
+	       }
+	   };
+	
+	// ** End of Facebook
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		final boolean SendBoolean = preferences.getBoolean("sendpicture", false);
+		final boolean SendBoolean = preferences.getBoolean("sendpicture", true);
 		
 		if (requestCode == TAKE_PICTURE && SendBoolean){
 			// Email the picture
 			Intent emailIntent = new Intent(Intent.ACTION_SEND);
 			emailIntent.setType("image/jpeg");
-			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"aviadpi@gmail.com"});
+			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email)});
 			emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Panh'd!");
 			emailIntent.putExtra(Intent.EXTRA_TEXT, "Hey Aviad, check out my new Panh'd!");
 			emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(outputFileUri.toString()));
 			startActivity(emailIntent);
 		}
+		
+		fbConnector.authorizeCallback(requestCode, resultCode, data);
 	}
 }

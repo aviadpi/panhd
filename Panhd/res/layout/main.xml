@@ -30,7 +30,38 @@
 	        	
 	    </LinearLayout>
 	   
-	
+	<LinearLayout 
+			android:layout_height="wrap_content" 
+			android:layout_width="wrap_content" 
+			android:layout_alignParentTop="true" 
+			android:layout_gravity="center"
+			android:id="@+id/ssslinearLayout1"
+			>
+			<Button 
+				android:id="@+id/tempbutton1" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content" 
+				android:text="LogOut" 
+				android:padding="25dp" 
+				android:layout_alignParentTop="true"
+				></Button>
+			
+			<Button 
+				android:id="@+id/tempbutton2" 
+				android:layout_height="wrap_content" 
+				android:text="LogIn" 
+				android:padding="25dp" 
+				android:layout_width="wrap_content"
+				></Button>
+				
+			<Button 
+				android:id="@+id/tempbutton3" 
+				android:layout_height="wrap_content" 
+				android:text="Post" 
+				android:padding="25dp" 
+				android:layout_width="wrap_content"
+				></Button>
+		</LinearLayout>
 	<RelativeLayout 
 		android:layout_height="wrap_content" 
 		android:layout_width="match_parent" 
@@ -49,6 +80,10 @@
 			android:layout_alignParentBottom="true"
 			android:layout_alignParentRight="true"
 			></ImageButton>
+			
+		
+		
+		
 			
 	</RelativeLayout>
     

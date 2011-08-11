@@ -16,7 +16,7 @@ public class SplashScreen extends Activity {
     	super.onCreate(savedInstanceState);
     	// Get the preferences
     	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		final boolean SplashBoolean = preferences.getBoolean("splashscreen", false);
+		final boolean SplashBoolean = preferences.getBoolean("splashscreen", true);
     	
     // ** Screen Splash
     	setContentView(R.layout.splash);
