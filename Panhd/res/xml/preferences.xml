@@ -18,5 +18,15 @@
                         android:defaultValue="true"
                         android:summary="Email the taken picture to me automatically "
                         android:key="sendpicture" />
+                <CheckBoxPreference
+                        android:title="Facebook log in"
+                        android:defaultValue="false"
+                        android:summary="Log in to Facebook on startup"
+                        android:key="facebooklogin" />
+                <CheckBoxPreference
+                        android:title="Wall post"
+                        android:defaultValue="true"
+                        android:summary="Allow posting messages on your Facebook wall"
+                        android:key="wallpost" />
 	     </PreferenceCategory>
 </PreferenceScreen>

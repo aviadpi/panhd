@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.SyncStateContract.Constants;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,9 +28,12 @@ import android.widget.Toast;
 public class Panhd extends Activity {
 
 	int TAKE_PICTURE = 235;
+	int EMAIL_SENT = 216;
 	private Uri outputFileUri;
 	private FacebookConnector fbConnector;
 	protected Handler mFacebookHandler;
+	private boolean facebookStarted = false;
+	private SharedPreferences preferences;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -38,15 +42,20 @@ public class Panhd extends Activity {
 		Display display = getWindowManager().getDefaultDisplay(); 
 		int Wpixels = display.getWidth();
 		int Hpixels = display.getHeight();
-		mFacebookHandler = new Handler();		
+		mFacebookHandler = new Handler();	
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		fbConnector = new FacebookConnector(this, getBaseContext());
-		
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		final boolean FacebookBoolean = preferences.getBoolean("facebooklogin", false);
+		final boolean FacebookPost = preferences.getBoolean("wallpost", false);
 		final boolean CameraBoolean = preferences.getBoolean("startcamera", false);
 		 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		if (FacebookBoolean){
+			fbConnector = new FacebookConnector(this, getBaseContext());
+			facebookStarted = true;
+		}
 
 		 // ** Starting the Camera, and calling the result with TAKE_PICTURE
 		Thread camerathread = new Thread(){
@@ -145,24 +154,44 @@ public class Panhd extends Activity {
 		Button temp = (Button) this.findViewById(R.id.tempbutton1);
 		temp.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				logOutInThread();
-//				fbConnector.logout();
+				if (facebookStarted){
+					logOutInThread();
+				} else {
+					showToast("You are not logged in to Facebook.");
+				}
 			}});
 		
 		Button temp2 = (Button) this.findViewById(R.id.tempbutton2);
 		temp2.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				fbConnector.login();
+				if (facebookStarted){
+					fbConnector.login();
+				} else {
+					startFacebook();
+				}
 			}
 		});
 		
 		Button temp3 = (Button) this.findViewById(R.id.tempbutton3);
 		temp3.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+				if (!facebookStarted){
+					startFacebook();
+				}
 				postMessageInThread("Yeah, it's coming...");
 			}
 		});
+		
+		if (FacebookPost){
+			if (isFirstLaunch()){
+				postMessageInThread(getString(R.string.FbfirstPost));
+				SharedPreferences.Editor editor = preferences.edit();
+				editor.putBoolean("isFirstLaunch", false);
+				editor.commit();
+			}
+		}
 	}
+	
 	// ** End of OnCreate //////////////////////////////////////////////////////////////////////////////
 	
 	// ** Settings
@@ -266,20 +295,51 @@ public class Panhd extends Activity {
 		
 		super.onActivityResult(requestCode, resultCode, data);
 		
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		final boolean SendBoolean = preferences.getBoolean("sendpicture", true);
+		final boolean FacebookPost = preferences.getBoolean("wallpost", false);
 		
 		if (requestCode == TAKE_PICTURE && SendBoolean){
-			// Email the picture
-			Intent emailIntent = new Intent(Intent.ACTION_SEND);
-			emailIntent.setType("image/jpeg");
-			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email)});
-			emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Panh'd!");
-			emailIntent.putExtra(Intent.EXTRA_TEXT, "Hey Aviad, check out my new Panh'd!");
-			emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(outputFileUri.toString()));
-			startActivity(emailIntent);
+			sendPicture();
 		}
+		
+		if(requestCode==EMAIL_SENT)
+	    {
+	        if(resultCode==Activity.RESULT_OK){
+	            Toast.makeText(this, "Mail sent.", Toast.LENGTH_SHORT).show();
+	            if (FacebookPost){
+	            	postMessageInThread(getString(R.string.FbMailPost));
+	            }
+	        } else if (resultCode==Activity.RESULT_CANCELED){
+	            Toast.makeText(this, "Mail canceled.", Toast.LENGTH_SHORT).show();
+	        }
+	    }
 		
 		fbConnector.authorizeCallback(requestCode, resultCode, data);
 	}
+	
+	private void sendPicture() {
+		Intent emailIntent = new Intent(Intent.ACTION_SEND);
+		emailIntent.setType("image/jpeg");
+		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email)});
+		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Panh'd!");
+		emailIntent.putExtra(Intent.EXTRA_TEXT, "Hey Aviad, check out my new Panh'd!");
+		emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(outputFileUri.toString()));
+		startActivityForResult(emailIntent, EMAIL_SENT);
+	}
+
+	private void showToast(String message){
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+	
+	protected void startFacebook() {
+		fbConnector = new FacebookConnector(this, getBaseContext());
+		facebookStarted = true;
+		
+	}
+	
+	private boolean isFirstLaunch() {
+        boolean isFirstLaunch = preferences.getBoolean("isFirstLaunch", true);
+        return isFirstLaunch;
+    }
+	
 }

@@ -24,14 +24,15 @@ public class FacebookConnector{
     private static final String EXPIRES = "expires_in";
     private static final String KEY = "facebook-credentials";
     private Facebook facebook = new Facebook("131326620295351");
+    private AsyncFacebookRunner mAsyncRunner;
 	private Activity activity;
 	
 	public FacebookConnector(Activity activity, Context context){
 		
 		this.activity = activity;
-		
-		facebook.authorize(activity, PERMISSIONS,
-			      new DialogListener() {
+		mAsyncRunner = new AsyncFacebookRunner(facebook);
+		facebook.authorize(activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,
+			      new LoginDialogListener() {
 			           @Override
 			           public void onComplete(Bundle values) {}
 			           @Override
@@ -73,6 +74,7 @@ public class FacebookConnector{
 		if (facebook.isSessionValid()){
 			Bundle parameters = new Bundle();
 	        parameters.putString("message", message);
+	        parameters.putString("link", "http://www.facebook.com/media/set/?set=a.477553187029.255929.703267029&l=3a2b9f863b");
 	        try {
 	        	String response = facebook.request("me/feed", parameters,"POST");
 	        	System.out.println(response);

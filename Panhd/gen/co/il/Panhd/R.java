@@ -59,7 +59,9 @@ public final class R {
     }
     public static final class string {
         public static final int FbLogOut=0x7f05000a;
+        public static final int FbMailPost=0x7f05000c;
         public static final int FbPostMsg=0x7f050009;
+        public static final int FbfirstPost=0x7f05000b;
         public static final int Panhd=0x7f050002;
         public static final int aboutInstructions=0x7f050007;
         public static final int abouttext=0x7f050008;
