@@ -42,7 +42,8 @@ public final class R {
         public static final int mainStartButton=0x7f070008;
         public static final int mainlinearLayout1=0x7f070007;
         public static final int mainrelativeLayout1=0x7f07000d;
-        public static final int menualbum=0x7f070011;
+        public static final int menualbum=0x7f070012;
+        public static final int menufacebook=0x7f070011;
         public static final int menupreferences=0x7f070010;
         public static final int ssslinearLayout1=0x7f070009;
         public static final int tempbutton1=0x7f07000a;

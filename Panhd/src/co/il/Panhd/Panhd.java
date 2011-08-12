@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.provider.SyncStateContract.Constants;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,15 +29,17 @@ public class Panhd extends Activity {
 	int TAKE_PICTURE = 235;
 	int EMAIL_SENT = 216;
 	private Uri outputFileUri;
-	private FacebookConnector fbConnector;
-	protected Handler mFacebookHandler;
-	private boolean facebookStarted = false;
-	private SharedPreferences preferences;
-
+	private static FacebookConnector fbConnector;
+	protected static Handler mFacebookHandler;
+	private boolean facebookConnectorStarted = false;
+	private static SharedPreferences preferences;
+	private static Activity activity;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		
+		activity = this;
 		Display display = getWindowManager().getDefaultDisplay(); 
 		int Wpixels = display.getWidth();
 		int Hpixels = display.getHeight();
@@ -46,7 +47,6 @@ public class Panhd extends Activity {
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		final boolean FacebookBoolean = preferences.getBoolean("facebooklogin", false);
-		final boolean FacebookPost = preferences.getBoolean("wallpost", false);
 		final boolean CameraBoolean = preferences.getBoolean("startcamera", false);
 		 
 		super.onCreate(savedInstanceState);
@@ -54,7 +54,7 @@ public class Panhd extends Activity {
 		
 		if (FacebookBoolean){
 			fbConnector = new FacebookConnector(this, getBaseContext());
-			facebookStarted = true;
+			facebookConnectorStarted = true;
 		}
 
 		 // ** Starting the Camera, and calling the result with TAKE_PICTURE
@@ -154,18 +154,20 @@ public class Panhd extends Activity {
 		Button temp = (Button) this.findViewById(R.id.tempbutton1);
 		temp.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				if (facebookStarted){
-					logOutInThread();
-				} else {
-					showToast("You are not logged in to Facebook.");
+				if (facebookConnectorStarted){
+					if (fbConnector.isLoggedIn()){
+						logOutInThread();
+					} else {
+						showToast("You are not logged in to Facebook.");
+					}
 				}
 			}});
 		
 		Button temp2 = (Button) this.findViewById(R.id.tempbutton2);
 		temp2.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				if (facebookStarted){
-					fbConnector.login();
+				if (facebookConnectorStarted){
+					fbConnector.login(isFirstLaunch(), true);
 				} else {
 					startFacebook();
 				}
@@ -175,23 +177,13 @@ public class Panhd extends Activity {
 		Button temp3 = (Button) this.findViewById(R.id.tempbutton3);
 		temp3.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				if (!facebookStarted){
-					startFacebook();
-				}
+				if (!facebookConnectorStarted) startFacebook();
+				if (!fbConnector.isLoggedIn()) fbConnector.login(isFirstLaunch(), true);
 				postMessageInThread("Yeah, it's coming...");
 			}
 		});
-		
-		if (FacebookPost){
-			if (isFirstLaunch()){
-				postMessageInThread(getString(R.string.FbfirstPost));
-				SharedPreferences.Editor editor = preferences.edit();
-				editor.putBoolean("isFirstLaunch", false);
-				editor.commit();
-			}
-		}
 	}
-	
+
 	// ** End of OnCreate //////////////////////////////////////////////////////////////////////////////
 	
 	// ** Settings
@@ -229,6 +221,10 @@ public class Panhd extends Activity {
 				startActivity(settingsActivity);
 				return true;
 				
+			case R.id.menufacebook:
+				showToast("Facebook was pressed");
+				return true;
+			
 			case R.id.menualbum:
 				Uri uri = Uri.parse("http://www.facebook.com/media/set/?set=a.477553187029.255929.703267029&l=3a2b9f863b"); 
 				Intent intent = new Intent(Intent.ACTION_VIEW, uri); 
@@ -249,7 +245,7 @@ public class Panhd extends Activity {
 	
 	// ** Facebook
 
-	private void postMessageInThread(final String msg) {
+	public static void postMessageInThread(final String msg) {
 		Thread t = new Thread() {
 			public void run() {
 
@@ -276,9 +272,9 @@ public class Panhd extends Activity {
 		t.start();
 	}
 	
-	   final Runnable mUpdateFacebookNotification = new Runnable() {
+	   final static Runnable mUpdateFacebookNotification = new Runnable() {
 	       public void run() {
-	       	Toast.makeText(getBaseContext(), getString(R.string.FbPostMsg), Toast.LENGTH_LONG).show();
+	       	Toast.makeText(activity.getBaseContext(), activity.getString(R.string.FbPostMsg), Toast.LENGTH_LONG).show();
 	       }
 	   };
 	   
@@ -305,16 +301,16 @@ public class Panhd extends Activity {
 		if(requestCode==EMAIL_SENT)
 	    {
 	        if(resultCode==Activity.RESULT_OK){
-	            Toast.makeText(this, "Mail sent.", Toast.LENGTH_SHORT).show();
+	            Toast.makeText(this, "Mail sent", Toast.LENGTH_SHORT).show();
 	            if (FacebookPost){
 	            	postMessageInThread(getString(R.string.FbMailPost));
 	            }
 	        } else if (resultCode==Activity.RESULT_CANCELED){
-	            Toast.makeText(this, "Mail canceled.", Toast.LENGTH_SHORT).show();
+	            Toast.makeText(this, "Mail canceled", Toast.LENGTH_SHORT).show();
 	        }
 	    }
 		
-		fbConnector.authorizeCallback(requestCode, resultCode, data);
+		if (facebookConnectorStarted) fbConnector.authorizeCallback(requestCode, resultCode, data);
 	}
 	
 	private void sendPicture() {
@@ -327,17 +323,17 @@ public class Panhd extends Activity {
 		startActivityForResult(emailIntent, EMAIL_SENT);
 	}
 
-	private void showToast(String message){
-		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	protected static void showToast(String message){
+		Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
 	}
 	
 	protected void startFacebook() {
 		fbConnector = new FacebookConnector(this, getBaseContext());
-		facebookStarted = true;
+		facebookConnectorStarted = true;
 		
 	}
 	
-	private boolean isFirstLaunch() {
+	protected static boolean isFirstLaunch() {
         boolean isFirstLaunch = preferences.getBoolean("isFirstLaunch", true);
         return isFirstLaunch;
     }

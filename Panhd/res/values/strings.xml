@@ -10,7 +10,7 @@
     <string name="aboutInstructions">To Panh\'d someone,\nAll you need to do is to picture him sleeping, and make a funny face.\nTry it!</string>
     <string name="abouttext">You Just Got Panh\'d!\n\nby: Aviad Panhi\n\nAll rights reserved\nbla bla bla...</string>
     <string name="FbPostMsg">Message posted to your facebook wall</string>
-    <string name="FbLogOut">User logged out of Facebook.</string>
+    <string name="FbLogOut">Logged out of Facebook</string>
     <string name="FbfirstPost">Started using Panh\'d,\nI bet it\'s gonna be hilarious...</string>
     <string name="FbMailPost">Just sent Aviad a new Panh\'d,\nWanna check it out?</string>
 </resources>

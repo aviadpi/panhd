@@ -1,6 +1,5 @@
 package co.il.Panhd;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -10,8 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.facebook.android.*;
@@ -23,28 +21,23 @@ public class FacebookConnector{
 	private static final String TOKEN = "access_token";
     private static final String EXPIRES = "expires_in";
     private static final String KEY = "facebook-credentials";
+    private boolean FacebookPost;
     private Facebook facebook = new Facebook("131326620295351");
     private AsyncFacebookRunner mAsyncRunner;
 	private Activity activity;
+	private boolean isLoggedIn;
+	private SharedPreferences preferences;
 	
 	public FacebookConnector(Activity activity, Context context){
 		
 		this.activity = activity;
 		mAsyncRunner = new AsyncFacebookRunner(facebook);
-		facebook.authorize(activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,
-			      new LoginDialogListener() {
-			           @Override
-			           public void onComplete(Bundle values) {}
-			           @Override
-			           public void onFacebookError(FacebookError error) {}
-			           @Override
-			           public void onError(DialogError e) {}
-			           @Override
-			           public void onCancel() {}
-			      }
-			);
-		
+		facebook.authorize(this.activity, PERMISSIONS ,new LoginDialogListener());
 		restoreCredentials(facebook);
+		
+		preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+		FacebookPost = preferences.getBoolean("wallpost", false);
+				
 	}
 	
 	public boolean saveCredentials(Facebook facebook) {
@@ -60,50 +53,69 @@ public class FacebookConnector{
     	facebook.setAccessExpires(sharedPreferences.getLong(EXPIRES, 0));
     	return facebook.isSessionValid();
 	}
-	
-	public void login() {
-	       if (!facebook.isSessionValid()) {
-	           facebook.authorize(this.activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,new LoginDialogListener());
-	       } else {
-	    	   showToast("You are already Logged in to Facebook.");
-	       }
-	   }
-
 
 	public void postMessageOnWall(String message){
 		if (facebook.isSessionValid()){
-			Bundle parameters = new Bundle();
-	        parameters.putString("message", message);
-	        parameters.putString("link", "http://www.facebook.com/media/set/?set=a.477553187029.255929.703267029&l=3a2b9f863b");
-	        try {
-	        	String response = facebook.request("me/feed", parameters,"POST");
-	        	System.out.println(response);
-	        } catch (IOException e) {
-	        	e.printStackTrace();
-	        }
-		} else {
-			login();
+			if (isLoggedIn){
+				Bundle parameters = new Bundle();
+		        parameters.putString("message", message);
+		        parameters.putString("link", "http://www.facebook.com/media/set/?set=a.477553187029.255929.703267029&l=3a2b9f863b");
+		        try {
+		        	String response = facebook.request("me/feed", parameters,"POST");
+		        	System.out.println(response);
+		        } catch (IOException e) {
+		        	e.printStackTrace();
+		        }
+			} else {
+				login(Panhd.isFirstLaunch(), false);
+			}
 		}
 	}
 	
+	public void login(boolean isFirstLaunch, boolean force) {
+	    if (facebook.isSessionValid()){
+	    	if (isLoggedIn){
+	    		showToast("You are already logged in to Facebook");
+	    	}else{
+	    		if (force){
+		    		   facebook.authorize(this.activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,new LoginDialogListener());
+		    	   }else{
+		    		   facebook.authorize(this.activity, PERMISSIONS ,new LoginDialogListener());
+		    	   }
+	    	}
+	    } else {
+	    	showToast("Facebook session is invalid");
+	    }
+	}
+
 	public void logout() {
 		if (facebook.isSessionValid()){
-	        try {
-	        	facebook.logout(activity);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	        if (isLoggedIn){
+	        	try {
+		        	facebook.logout(activity);
+			    	setLoggedIn(false);
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	        } else {
+	        	showToast("You are not logged in to Facebook");
+	        }
+	        
 		} else {
-			showToast("You are not logged in to Facebook.");
+			showToast("Facebook session is invalid");
 		}
 	}
 
 	class LoginDialogListener implements DialogListener {
 	    public void onComplete(Bundle values) {
 	    	saveCredentials(facebook);
-	    	showToast("Logged in to Facebook.");
+	    	showToast("Logged in to Facebook");
+	    	setLoggedIn(true);
+	    	if (Panhd.isFirstLaunch() && FacebookPost){
+	    		postFirstTime();
+	    	}
 	    }
 	    public void onFacebookError(FacebookError error) {
 	    	showToast("Authentication with Facebook failed.");
@@ -142,7 +154,23 @@ public class FacebookConnector{
 		facebook.authorizeCallback(requestCode, resultCode, data);
 	}
 	
+	public void postFirstTime() {
+		Panhd.postMessageInThread(activity.getString(R.string.FbfirstPost));
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putBoolean("isFirstLaunch", false);
+		editor.commit();
+	}
+	
 	private void showToast(String message){
 		Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
 	}
+
+	public void setLoggedIn(boolean isLoggedIn) {
+		this.isLoggedIn = isLoggedIn;
+	}
+
+	public boolean isLoggedIn() {
+		return isLoggedIn;
+	}
+
 }

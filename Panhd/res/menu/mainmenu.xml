@@ -4,7 +4,10 @@
    <item android:id="@+id/menupreferences"
           android:icon="@drawable/preferencesicon72"
           android:title="Preferences" />
+    <item android:id="@+id/menufacebook"
+          android:icon="@drawable/facebookicon72"
+          android:title="Facebook" />
     <item android:id="@+id/menualbum"
           android:icon="@drawable/icon"
-          android:title="Go to Panh'd album!" />
+          android:title="Panh'd album!" />
 </menu>
