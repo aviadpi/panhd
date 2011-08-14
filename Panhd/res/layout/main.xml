@@ -29,7 +29,7 @@
 	        	></Button>
 	        	
 	    </LinearLayout>
-	   
+	   <!--  
 	<LinearLayout 
 			android:layout_height="wrap_content" 
 			android:layout_width="wrap_content" 
@@ -42,26 +42,30 @@
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content" 
 				android:text="LogOut" 
-				android:padding="25dp" 
-				android:layout_alignParentTop="true"
 				></Button>
 			
 			<Button 
 				android:id="@+id/tempbutton2" 
 				android:layout_height="wrap_content" 
 				android:text="LogIn" 
-				android:padding="25dp" 
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent" 
 				></Button>
 				
 			<Button 
 				android:id="@+id/tempbutton3" 
 				android:layout_height="wrap_content" 
 				android:text="Post" 
-				android:padding="25dp" 
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent" 
+				></Button>
+				
+			<Button 
+				android:id="@+id/tempbutton4" 
+				android:layout_height="wrap_content" 
+				android:text="Popup" 
+				android:layout_width="fill_parent" 
 				></Button>
 		</LinearLayout>
+		-->
 	<RelativeLayout 
 		android:layout_height="wrap_content" 
 		android:layout_width="match_parent" 
@@ -81,6 +85,19 @@
 			android:layout_alignParentRight="true"
 			></ImageButton>
 			
+			<!-- 
+		<TextView 
+			android:layout_height="wrap_content" 
+			android:text="Blankview" 
+			android:layout_toLeftOf="@+id/mainAboutButton" 
+			android:layout_width="wrap_content" 
+			android:id="@+id/mainBlankview" 
+			android:layout_alignTop="@+id/mainAboutButton" 
+			android:layout_alignBottom="@+id/mainAboutButton"
+			android:visibility = "invisible"
+			android:layout_gravity="center"
+			></TextView>
+			-->
 		
 		
 		

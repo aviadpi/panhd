@@ -27,13 +27,16 @@ public class FacebookConnector{
 	private Activity activity;
 	private boolean isLoggedIn;
 	private SharedPreferences preferences;
+	private String messageToPost;
 	
 	public FacebookConnector(Activity activity, Context context){
 		
 		this.activity = activity;
 		mAsyncRunner = new AsyncFacebookRunner(facebook);
-		facebook.authorize(this.activity, PERMISSIONS ,new LoginDialogListener());
 		restoreCredentials(facebook);
+		
+//		facebook.authorize(this.activity, PERMISSIONS ,new LoginDialogListener());
+		facebook.authorize(this.activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,new LoginDialogListener());
 		
 		preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 		FacebookPost = preferences.getBoolean("wallpost", false);
@@ -55,38 +58,48 @@ public class FacebookConnector{
 	}
 
 	public void postMessageOnWall(String message){
+		messageToPost = message;
 		if (facebook.isSessionValid()){
 			if (isLoggedIn){
 				Bundle parameters = new Bundle();
-		        parameters.putString("message", message);
+		        parameters.putString("message", messageToPost);
 		        parameters.putString("link", "http://www.facebook.com/media/set/?set=a.477553187029.255929.703267029&l=3a2b9f863b");
 		        try {
 		        	String response = facebook.request("me/feed", parameters,"POST");
 		        	System.out.println(response);
+//		        	Panhd.showToast(activity.getString(R.string.FbPostMsg));
 		        } catch (IOException e) {
 		        	e.printStackTrace();
 		        }
 			} else {
-				login(Panhd.isFirstLaunch(), false);
+				loginAndPost(Panhd.isFirstLaunch(), false);
 			}
 		}
 	}
 	
 	public void login(boolean isFirstLaunch, boolean force) {
-	    if (facebook.isSessionValid()){
 	    	if (isLoggedIn){
 	    		showToast("You are already logged in to Facebook");
 	    	}else{
 	    		if (force){
-		    		   facebook.authorize(this.activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,new LoginDialogListener());
+		    		   facebook.authorize(this.activity, PERMISSIONS, Facebook.FORCE_DIALOG_AUTH ,new LoginDialogListener());
 		    	   }else{
-		    		   facebook.authorize(this.activity, PERMISSIONS ,new LoginDialogListener());
+		    		   facebook.authorize(this.activity, PERMISSIONS , new LoginDialogListener());
 		    	   }
 	    	}
-	    } else {
-	    	showToast("Facebook session is invalid");
-	    }
 	}
+	
+	public void loginAndPost(boolean isFirstLaunch, boolean force) {
+    	if (isLoggedIn){
+    		showToast("You are already logged in to Facebook");
+    	}else{
+    		if (force){
+	    		   facebook.authorize(this.activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,new LoginDialogAndPostListener());
+	    	   }else{
+	    		   facebook.authorize(this.activity, PERMISSIONS ,new LoginDialogAndPostListener());
+	    	   }
+    	}
+}
 
 	public void logout() {
 		if (facebook.isSessionValid()){
@@ -118,37 +131,58 @@ public class FacebookConnector{
 	    	}
 	    }
 	    public void onFacebookError(FacebookError error) {
-	    	showToast("Authentication with Facebook failed.");
+	    	showToast("Facebook Authentication failed");
 	    }
 	    public void onError(DialogError error) {
-	    	showToast("Authentication with Facebook failed.");
+	    	showToast("Facebook Authentication failed");
 	    }
 	    public void onCancel() {
-	    	showToast("Authentication with Facebook cancelled.");
+	    	showToast("Facebook Authentication cancelled");
 	    }
 	}
 
-	class WallPostDialogListener implements DialogListener {
-		public void onComplete(Bundle values) {
-            		final String postId = values.getString("post_id");
-            		if (postId != null) {
-            		showToast("Message posted to your facebook wall.");
-            	} else {
-            		showToast("Wall post cancelled.");
-            	}
-        	}
-		public void onFacebookError(FacebookError e) {
-			showToast("Failed to post to wall.");
-			e.printStackTrace();
-		}
-		public void onError(DialogError e) {
-			showToast("Failed to post to wall.");
-			e.printStackTrace();
-		}
-		public void onCancel() {
-			showToast("Wall post cancelled.");
-		}
-    }
+	class LoginDialogAndPostListener implements DialogListener {
+	    public void onComplete(Bundle values) {
+	    	saveCredentials(facebook);
+	    	showToast("Logged in to Facebook");
+	    	setLoggedIn(true);
+	    	if (Panhd.isFirstLaunch() && FacebookPost){
+	    		postFirstTime();
+	    	}
+	    	postMessageOnWall(messageToPost);
+	    }
+	    public void onFacebookError(FacebookError error) {
+	    	showToast("Facebook Authentication failed");
+	    }
+	    public void onError(DialogError error) {
+	    	showToast("Facebook Authentication failed");
+	    }
+	    public void onCancel() {
+	    	showToast("Facebook Authentication cancelled");
+	    }
+	}
+	
+//	class WallPostDialogListener implements DialogListener {
+//		public void onComplete(Bundle values) {
+//            		final String postId = values.getString("post_id");
+//            		if (postId != null) {
+//            		showToast(activity.getString(R.string.FbPostMsg));
+//            	} else {
+//            		showToast("Wall post cancelled.");
+//            	}
+//        	}
+//		public void onFacebookError(FacebookError e) {
+//			showToast("Failed to post to wall.");
+//			e.printStackTrace();
+//		}
+//		public void onError(DialogError e) {
+//			showToast("Failed to post to wall.");
+//			e.printStackTrace();
+//		}
+//		public void onCancel() {
+//			showToast("Wall post cancelled.");
+//		}
+//    }
 	
 	public void authorizeCallback(int requestCode, int resultCode, Intent data) {
 		facebook.authorizeCallback(requestCode, resultCode, data);
