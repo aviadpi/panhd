@@ -23,7 +23,7 @@ public class FacebookConnector{
     private static final String KEY = "facebook-credentials";
     private boolean FacebookPost;
     private Facebook facebook = new Facebook("131326620295351");
-    private AsyncFacebookRunner mAsyncRunner;
+//    private AsyncFacebookRunner mAsyncRunner;
 	private Activity activity;
 	private boolean isLoggedIn;
 	private SharedPreferences preferences;
@@ -33,7 +33,7 @@ public class FacebookConnector{
 	public FacebookConnector(Activity activity, Context context){
 		
 		this.activity = activity;
-		mAsyncRunner = new AsyncFacebookRunner(facebook);
+//		mAsyncRunner = new AsyncFacebookRunner(facebook);
 		restoreCredentials(facebook);
 		
 		facebook.authorize(this.activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,new LoginDialogListener());

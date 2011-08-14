@@ -4,24 +4,6 @@
    <item android:id="@+id/menupreferences"
           android:icon="@drawable/preferencesicon72"
           android:title="Preferences" />
-    <item android:id="@+id/menufacebook"
-          android:icon="@drawable/facebookicon72"
-          android:title="Facebook" >
-        <menu>
-            <item android:id="@+id/login"
-                  android:title="Log in" 
-                  android:icon="@drawable/loginicon64"
-            />
-            <item android:id="@+id/logout"
-                  android:title="Log out" 
-                  android:icon="@drawable/logouticon64"
-                  />
-            <item android:id="@+id/post"
-                  android:title="Post something" 
-                  android:icon="@drawable/posticon64"
-                  />
-        </menu>
-    </item>
     <item android:id="@+id/menualbum"
           android:icon="@drawable/icon"
           android:title="Panh'd album!" />

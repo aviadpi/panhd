@@ -16,6 +16,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,7 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import net.londatiga.android.*;
+//import net.londatiga.android.*;
 
 
 public class Panhd extends Activity {
@@ -36,6 +37,14 @@ public class Panhd extends Activity {
 	private boolean facebookConnectorStarted = false;
 	private static SharedPreferences preferences;
 	private static Activity activity;
+	private SubMenu fileMenu;
+	
+	private static final int FacebookConst = 123;
+
+//	private static final int LOG_IN = 0;
+	private static final int LOG_IN = 666;
+	private static final int LOG_OUT = LOG_IN + 1;
+	private static final int POST = LOG_OUT + 1;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -173,13 +182,22 @@ public class Panhd extends Activity {
 	// ** Menu
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		fileMenu = menu.addSubMenu("Facebook");
+	    fileMenu.add(FacebookConst, LOG_IN, 0, "Log in");
+	    fileMenu.add(FacebookConst, LOG_OUT, 1, "Log out");
+	    fileMenu.add(FacebookConst, POST, 2, "Post something");
+	    fileMenu.setIcon(R.drawable.facebookicon72);
+	    
+	    modifySubMenu();
+		
+	    MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.mainmenu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		modifySubMenu();
 		// Handle item selection
 		try {
 			switch (item.getItemId()) {
@@ -189,100 +207,29 @@ public class Panhd extends Activity {
 				startActivity(settingsActivity);
 				return true;
 				
-			case R.id.menufacebook:
-				
-//				// Creating the popups
-//				// Add Status item
-//				ActionItem statusAction = new ActionItem();
-//				statusAction.setTitle("Logged out");
-//				statusAction.setIcon(getResources().getDrawable(R.drawable.loggedout64));
-//				if (facebookConnectorStarted){
-//					if (fbConnector.isLoggedIn()){
-//						statusAction.setTitle("Logged in");
-//						statusAction.setIcon(getResources().getDrawable(R.drawable.loggedin64));
-//					}
-//				} 
-//				
-//				//Add action item
-//				ActionItem addAction = new ActionItem();
-//				addAction.setTitle("Log in");
-//				addAction.setIcon(getResources().getDrawable(R.drawable.loginicon64));
-//				 
-//				//Accept action item
-//				ActionItem accAction = new ActionItem();
-//				accAction.setTitle("Log out");
-//				accAction.setIcon(getResources().getDrawable(R.drawable.logouticon64));
-//				 
-//				//Upload action item
-//				ActionItem upAction = new ActionItem();
-//				upAction.setTitle("Post");
-//				upAction.setIcon(getResources().getDrawable(R.drawable.posticon64));
-//				
-//				final QuickAction mQuickAction  = new QuickAction(this);
-//				 
-//				mQuickAction.addActionItem(statusAction);
-//				mQuickAction.addActionItem(addAction);
-//				mQuickAction.addActionItem(accAction);
-//				mQuickAction.addActionItem(upAction);
-//				mQuickAction.animateTrack(true);
-//				
-//				//setup the action item click listener
-//				mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
-//				    @Override
-//				        public void onItemClick(int pos) {
-//				        if (pos == 1) { //Login item selected
-//				        	if (facebookConnectorStarted){
-//								fbConnector.login(isFirstLaunch(), true);
-//							} else {
-//								startFacebook();
-//							}
-//				        } else if (pos == 2) { //Logout item selected
-//				        	if (facebookConnectorStarted){
-//								if (fbConnector.isLoggedIn()){
-//									logOutInThread();
-//								} else {
-//									showToast("You are not logged in to Facebook.");
-//								}
-//							}
-//				        } else if (pos == 3) { //Post item selected
-//				        	if (!facebookConnectorStarted) startFacebook();
-//							if (!fbConnector.isLoggedIn()) fbConnector.login(isFirstLaunch(), true);
-//							postMessageInThread("Yeah, it's coming...");
-//				        }
-//				    }
-//				});
-//				mQuickAction.show(activity.findViewById(R.id.mainAboutButton));
-				
-				
-				
-				return true;
-			
-			case R.id.menualbum:
-				Uri uri = Uri.parse("http://www.facebook.com/media/set/?set=a.477553187029.255929.703267029&l=3a2b9f863b"); 
-				Intent intent = new Intent(Intent.ACTION_VIEW, uri); 
-				startActivity(intent); 
-				return true;
-				
-			case R.id.login:
+			case LOG_IN:
 				if (facebookConnectorStarted){
 					fbConnector.login(isFirstLaunch(), true);
+					return true;
 				} else {
 					startFacebook();
+					return true;
 				}
-				return true;
 				
-			case R.id.logout:
-				if (facebookConnectorStarted){
+		    case LOG_OUT:
+		    	if (facebookConnectorStarted){
 					if (fbConnector.isLoggedIn()){
 						logOutInThread();
+						return true;
 					} else {
 						showToast("You are not logged in to Facebook.");
+						return true;
 					}
 				}
-				return true;
-				
-			case R.id.post:
-				if (facebookConnectorStarted){
+		        return true;
+		        
+		    case POST:
+		    	if (facebookConnectorStarted){
 					if (fbConnector.isLoggedIn()){
 						fbConnector.postDialog();
 //						postMessageInThread("Yeah, it's coming...");
@@ -296,6 +243,8 @@ public class Panhd extends Activity {
 					return true;
 				}
 				
+			
+				
 			default:
 				return super.onOptionsItemSelected(item);
 			}
@@ -303,6 +252,32 @@ public class Panhd extends Activity {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	private void modifySubMenu() {
+		try {
+			// Logged out
+			fileMenu.findItem(LOG_IN).setEnabled(true);
+			fileMenu.findItem(LOG_OUT).setEnabled(false);
+			fileMenu.findItem(POST).setEnabled(false);
+			
+			fileMenu.setHeaderIcon(getResources().getDrawable(R.drawable.loggedout64));
+			fileMenu.setHeaderTitle("Logged out");
+			if (facebookConnectorStarted){
+				if (fbConnector.isLoggedIn()){
+					// Logged in
+					fileMenu.findItem(LOG_IN).setEnabled(false);
+					fileMenu.findItem(LOG_OUT).setEnabled(true);
+					fileMenu.findItem(POST).setEnabled(true);
+						
+					fileMenu.setHeaderTitle("Logged in");
+					fileMenu.setHeaderIcon(getResources().getDrawable(R.drawable.loggedin64));
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 
 	// ** End of Menu
@@ -395,3 +370,66 @@ public class Panhd extends Activity {
     }
 	
 }
+
+//
+//// Creating the popups
+//// Add Status item
+//ActionItem statusAction = new ActionItem();
+//statusAction.setTitle("Logged out");
+//statusAction.setIcon(getResources().getDrawable(R.drawable.loggedout64));
+//if (facebookConnectorStarted){
+//	if (fbConnector.isLoggedIn()){
+//		statusAction.setTitle("Logged in");
+//		statusAction.setIcon(getResources().getDrawable(R.drawable.loggedin64));
+//	}
+//} 
+//
+////Add action item
+//ActionItem addAction = new ActionItem();
+//addAction.setTitle("Log in");
+//addAction.setIcon(getResources().getDrawable(R.drawable.loginicon64));
+// 
+////Accept action item
+//ActionItem accAction = new ActionItem();
+//accAction.setTitle("Log out");
+//accAction.setIcon(getResources().getDrawable(R.drawable.logouticon64));
+// 
+////Upload action item
+//ActionItem upAction = new ActionItem();
+//upAction.setTitle("Post");
+//upAction.setIcon(getResources().getDrawable(R.drawable.posticon64));
+//
+//final QuickAction mQuickAction  = new QuickAction(this);
+// 
+//mQuickAction.addActionItem(statusAction);
+//mQuickAction.addActionItem(addAction);
+//mQuickAction.addActionItem(accAction);
+//mQuickAction.addActionItem(upAction);
+//mQuickAction.animateTrack(true);
+//
+////setup the action item click listener
+//mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+//    @Override
+//        public void onItemClick(int pos) {
+//        if (pos == 1) { //Login item selected
+//        	if (facebookConnectorStarted){
+//				fbConnector.login(isFirstLaunch(), true);
+//			} else {
+//				startFacebook();
+//			}
+//        } else if (pos == 2) { //Logout item selected
+//        	if (facebookConnectorStarted){
+//				if (fbConnector.isLoggedIn()){
+//					logOutInThread();
+//				} else {
+//					showToast("You are not logged in to Facebook.");
+//				}
+//			}
+//        } else if (pos == 3) { //Post item selected
+//        	if (!facebookConnectorStarted) startFacebook();
+//			if (!fbConnector.isLoggedIn()) fbConnector.login(isFirstLaunch(), true);
+//			postMessageInThread("Yeah, it's coming...");
+//        }
+//    }
+//});
+//mQuickAction.show(activity.findViewById(R.id.mainAboutButton));
