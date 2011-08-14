@@ -13,4 +13,6 @@
     <string name="FbLogOut">Logged out of Facebook</string>
     <string name="FbfirstPost">Started using Panh\'d,\nI bet it\'s gonna be hilarious...</string>
     <string name="FbMailPost">Just sent Aviad a new Panh\'d,\nWanna check it out?</string>
+    <string name="FbPostErrorLimit">{"error":{"type":"OAuthException","message":"(#341) Feed action request limit reached"}}</string>
+    <string name="FbMailPost">Error posting on wall, limit reached.</string>
 </resources>

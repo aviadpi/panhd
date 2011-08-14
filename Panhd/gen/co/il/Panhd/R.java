@@ -88,13 +88,16 @@ public final class R {
         public static final int i_more=0x7f09000c;
         public static final int iv_icon=0x7f090007;
         public static final int l_list=0x7f09000b;
+        public static final int login=0x7f09001b;
+        public static final int logout=0x7f09001c;
         public static final int mainAboutButton=0x7f090011;
         public static final int mainStartButton=0x7f09000f;
         public static final int mainlinearLayout1=0x7f09000e;
         public static final int mainrelativeLayout1=0x7f090010;
-        public static final int menualbum=0x7f09001b;
+        public static final int menualbum=0x7f09001e;
         public static final int menufacebook=0x7f09001a;
         public static final int menupreferences=0x7f090019;
+        public static final int post=0x7f09001d;
         public static final int scroll=0x7f090014;
         public static final int t_name=0x7f09000d;
         public static final int tracks=0x7f090015;
@@ -116,6 +119,7 @@ public final class R {
     public static final class string {
         public static final int FbLogOut=0x7f06000a;
         public static final int FbMailPost=0x7f06000c;
+        public static final int FbPostErrorLimit=0x7f06000d;
         public static final int FbPostMsg=0x7f060009;
         public static final int FbfirstPost=0x7f06000b;
         public static final int Panhd=0x7f060002;

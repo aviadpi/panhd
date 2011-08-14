@@ -84,24 +84,6 @@
 			android:layout_alignParentBottom="true"
 			android:layout_alignParentRight="true"
 			></ImageButton>
-			
-			<!-- 
-		<TextView 
-			android:layout_height="wrap_content" 
-			android:text="Blankview" 
-			android:layout_toLeftOf="@+id/mainAboutButton" 
-			android:layout_width="wrap_content" 
-			android:id="@+id/mainBlankview" 
-			android:layout_alignTop="@+id/mainAboutButton" 
-			android:layout_alignBottom="@+id/mainAboutButton"
-			android:visibility = "invisible"
-			android:layout_gravity="center"
-			></TextView>
-			-->
-		
-		
-		
-			
 	</RelativeLayout>
     
     
