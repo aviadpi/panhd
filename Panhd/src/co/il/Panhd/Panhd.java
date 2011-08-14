@@ -197,11 +197,11 @@ public class Panhd extends Activity {
 				// Add Status item
 				ActionItem statusAction = new ActionItem();
 				statusAction.setTitle("Logged out");
-				statusAction.setIcon(getResources().getDrawable(R.drawable.notokicon64));
+				statusAction.setIcon(getResources().getDrawable(R.drawable.loggedout64));
 				if (facebookConnectorStarted){
 					if (fbConnector.isLoggedIn()){
 						statusAction.setTitle("Logged in");
-						statusAction.setIcon(getResources().getDrawable(R.drawable.okicon64));
+						statusAction.setIcon(getResources().getDrawable(R.drawable.loggedin64));
 					}
 				} 
 				
