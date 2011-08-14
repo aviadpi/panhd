@@ -41,7 +41,6 @@ public class Panhd extends Activity {
 	
 	private static final int FacebookConst = 123;
 
-//	private static final int LOG_IN = 0;
 	private static final int LOG_IN = 666;
 	private static final int LOG_OUT = LOG_IN + 1;
 	private static final int POST = LOG_OUT + 1;
@@ -64,7 +63,7 @@ public class Panhd extends Activity {
 		setContentView(R.layout.main);
 
 		 // ** Starting the Camera, and calling the result with TAKE_PICTURE
-		Thread camerathread = new Thread(){
+		final Thread camerathread = new Thread(){
 	           @Override
 	           public void run() {
 	        	   String fileName = "PanhdPicture.jpg";
@@ -72,7 +71,12 @@ public class Panhd extends Activity {
 	        	   File file = new File(Environment.getExternalStorageDirectory(), fileName);
 	        	   outputFileUri = Uri.fromFile(file);
 	        	   cameraintent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-	        	   startActivityForResult(cameraintent, TAKE_PICTURE);
+	        	   try {
+					startActivityForResult(cameraintent, TAKE_PICTURE);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	           }
  		};
 		
@@ -144,12 +148,7 @@ public class Panhd extends Activity {
 		Button start = (Button) this.findViewById(R.id.mainStartButton);
 		start.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				String fileName = "PanhdPicture.jpg";
-				Intent cameraintent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				File file = new File(Environment.getExternalStorageDirectory(), fileName);
-				outputFileUri = Uri.fromFile(file);
-				cameraintent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-				startActivityForResult(cameraintent, TAKE_PICTURE);
+				camerathread.start();
 			}});
 		start.setMinHeight(Hpixels/4);
 		start.setMinWidth(Wpixels/2);
@@ -206,6 +205,12 @@ public class Panhd extends Activity {
 				Intent settingsActivity = new Intent(this.getBaseContext() ,Preferences.class);
 				startActivity(settingsActivity);
 				return true;
+				
+			case R.id.menualbum:
+                Uri uri = Uri.parse("http://www.facebook.com/media/set/?set=a.477553187029.255929.703267029&l=3a2b9f863b"); 
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri); 
+                startActivity(intent); 
+                return true;
 				
 			case LOG_IN:
 				if (facebookConnectorStarted){
@@ -268,7 +273,8 @@ public class Panhd extends Activity {
 					// Logged in
 					fileMenu.findItem(LOG_IN).setEnabled(false);
 					fileMenu.findItem(LOG_OUT).setEnabled(true);
-					fileMenu.findItem(POST).setEnabled(true);
+					final boolean FacebookPost = preferences.getBoolean("wallpost", false);
+					if (FacebookPost) fileMenu.findItem(POST).setEnabled(true);
 						
 					fileMenu.setHeaderTitle("Logged in");
 					fileMenu.setHeaderIcon(getResources().getDrawable(R.drawable.loggedin64));
@@ -370,66 +376,3 @@ public class Panhd extends Activity {
     }
 	
 }
-
-//
-//// Creating the popups
-//// Add Status item
-//ActionItem statusAction = new ActionItem();
-//statusAction.setTitle("Logged out");
-//statusAction.setIcon(getResources().getDrawable(R.drawable.loggedout64));
-//if (facebookConnectorStarted){
-//	if (fbConnector.isLoggedIn()){
-//		statusAction.setTitle("Logged in");
-//		statusAction.setIcon(getResources().getDrawable(R.drawable.loggedin64));
-//	}
-//} 
-//
-////Add action item
-//ActionItem addAction = new ActionItem();
-//addAction.setTitle("Log in");
-//addAction.setIcon(getResources().getDrawable(R.drawable.loginicon64));
-// 
-////Accept action item
-//ActionItem accAction = new ActionItem();
-//accAction.setTitle("Log out");
-//accAction.setIcon(getResources().getDrawable(R.drawable.logouticon64));
-// 
-////Upload action item
-//ActionItem upAction = new ActionItem();
-//upAction.setTitle("Post");
-//upAction.setIcon(getResources().getDrawable(R.drawable.posticon64));
-//
-//final QuickAction mQuickAction  = new QuickAction(this);
-// 
-//mQuickAction.addActionItem(statusAction);
-//mQuickAction.addActionItem(addAction);
-//mQuickAction.addActionItem(accAction);
-//mQuickAction.addActionItem(upAction);
-//mQuickAction.animateTrack(true);
-//
-////setup the action item click listener
-//mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
-//    @Override
-//        public void onItemClick(int pos) {
-//        if (pos == 1) { //Login item selected
-//        	if (facebookConnectorStarted){
-//				fbConnector.login(isFirstLaunch(), true);
-//			} else {
-//				startFacebook();
-//			}
-//        } else if (pos == 2) { //Logout item selected
-//        	if (facebookConnectorStarted){
-//				if (fbConnector.isLoggedIn()){
-//					logOutInThread();
-//				} else {
-//					showToast("You are not logged in to Facebook.");
-//				}
-//			}
-//        } else if (pos == 3) { //Post item selected
-//        	if (!facebookConnectorStarted) startFacebook();
-//			if (!fbConnector.isLoggedIn()) fbConnector.login(isFirstLaunch(), true);
-//			postMessageInThread("Yeah, it's coming...");
-//        }
-//    }
-//});
-//mQuickAction.show(activity.findViewById(R.id.mainAboutButton));
