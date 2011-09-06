@@ -1,6 +1,8 @@
 package co.il.Panhd;
 
 import java.io.File;
+//import java.net.URLEncoder;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -13,6 +15,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.Display;
+//import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +24,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+//import android.webkit.WebView;
+//import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -38,12 +43,15 @@ public class Panhd extends Activity {
 	private static SharedPreferences preferences;
 	private static Activity activity;
 	private SubMenu fileMenu;
+//	private WebView likewebview;
+//	private String likeURL;
 	
 	private static final int FacebookConst = 123;
 
 	private static final int LOG_IN = 666;
 	private static final int LOG_OUT = LOG_IN + 1;
-	private static final int POST = LOG_OUT + 1;
+	private static final int POST = LOG_IN + 2;
+//	private static final int LIKE = LOG_IN + 3;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -74,7 +82,6 @@ public class Panhd extends Activity {
 	        	   try {
 					startActivityForResult(cameraintent, TAKE_PICTURE);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	           }
@@ -108,10 +115,15 @@ public class Panhd extends Activity {
 
 						@Override
 						public void onClick(View v) {
-							Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-							emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getString(R.string.myemail)});
-							emailIntent.setType("*/*");
-							startActivity(emailIntent);
+							try {
+								Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+								emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getString(R.string.myemail)});
+								emailIntent.setType("*/*");
+								startActivity(emailIntent);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					});
 					//Facebook Button
@@ -145,7 +157,7 @@ public class Panhd extends Activity {
 
 
 		// ** "Start the camera" Button
-		Button start = (Button) this.findViewById(R.id.mainStartButton);
+		Button start = (Button) findViewById(R.id.mainStartButton);
 		start.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				camerathread.start();
@@ -158,6 +170,22 @@ public class Panhd extends Activity {
 			fbConnector = new FacebookConnector(this, getBaseContext());
 			facebookConnectorStarted = true;
 		}
+		
+//		likewebview = (WebView) findViewById(R.id.likewebview);
+//		likewebview.getSettings().setJavaScriptEnabled(true);
+//		likewebview.setWebViewClient(new HelloWebViewClient());
+//        
+//        likeURL ="http://www.facebook.com/plugins/like.php?" +
+//        "href=" + URLEncoder.encode( "http://developers.facebook.com/docs/opengraph/" )
+//        + "&" +
+//        "layout=button_count&" +
+//        "show_faces=0&" +
+//        "width=90&" +
+//        "height=24&" +
+//        "locale=en_IN" +
+//        "colorscheme=light" ;
+
+		
 	}
 
 	// ** End of OnCreate //////////////////////////////////////////////////////////////////////////////
@@ -185,6 +213,7 @@ public class Panhd extends Activity {
 	    fileMenu.add(FacebookConst, LOG_IN, 0, "Log in");
 	    fileMenu.add(FacebookConst, LOG_OUT, 1, "Log out");
 	    fileMenu.add(FacebookConst, POST, 2, "Post something");
+//	    fileMenu.add(FacebookConst, LIKE, 3, "Like my album");
 	    fileMenu.setIcon(R.drawable.facebookicon72);
 	    
 	    modifySubMenu();
@@ -248,7 +277,9 @@ public class Panhd extends Activity {
 					return true;
 				}
 				
-			
+//		    case LIKE:
+//		    	likewebview.loadUrl( likeURL );
+//		    	return true;
 				
 			default:
 				return super.onOptionsItemSelected(item);
@@ -274,14 +305,13 @@ public class Panhd extends Activity {
 					fileMenu.findItem(LOG_IN).setEnabled(false);
 					fileMenu.findItem(LOG_OUT).setEnabled(true);
 					final boolean FacebookPost = preferences.getBoolean("wallpost", false);
-					if (FacebookPost) fileMenu.findItem(POST).setEnabled(true);
+					fileMenu.findItem(POST).setEnabled(FacebookPost);
 						
 					fileMenu.setHeaderTitle("Logged in");
 					fileMenu.setHeaderIcon(getResources().getDrawable(R.drawable.loggedin64));
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
@@ -306,20 +336,39 @@ public class Panhd extends Activity {
 		Thread t = new Thread() {
 			public void run() {
 		    	try {
-		    		fbConnector.logout();
+					fbConnector.logout();
 					mFacebookHandler.post(mUpdateFacebookLogOutNotification);
-				} catch (Exception ex) {
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-		    }
+			}
 		};
 		t.start();
 	}
 	
-	   final Runnable mUpdateFacebookLogOutNotification = new Runnable() {
-	       public void run() {
-	       	Toast.makeText(getBaseContext(), getString(R.string.FbLogOut), Toast.LENGTH_LONG).show();
-	       }
-	   };
+	final Runnable mUpdateFacebookLogOutNotification = new Runnable() {
+		public void run() {
+			Toast.makeText(getBaseContext(), getString(R.string.FbLogOut), Toast.LENGTH_LONG).show();
+		}
+	};
+	// Like WebView
+//	private class HelloWebViewClient extends WebViewClient {
+//	    @Override
+//	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//	        view.loadUrl(url);
+//	        return true;
+//	    }
+//	}
+	
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//	    if ((keyCode == KeyEvent.KEYCODE_BACK) && likewebview.canGoBack()) {
+//	    	likewebview.goBack();
+//	        return true;
+//	    }
+//	    return super.onKeyDown(keyCode, event);
+//	}
 	   
 	// ** End of Facebook
 	
@@ -331,8 +380,13 @@ public class Panhd extends Activity {
 		final boolean SendBoolean = preferences.getBoolean("sendpicture", true);
 		final boolean FacebookPost = preferences.getBoolean("wallpost", false);
 		
-		if (requestCode == TAKE_PICTURE && SendBoolean){
-			sendPicture();
+		try {
+			if (requestCode == TAKE_PICTURE && SendBoolean){
+				sendPicture();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if(requestCode==EMAIL_SENT)
@@ -351,13 +405,18 @@ public class Panhd extends Activity {
 	}
 	
 	private void sendPicture() {
-		Intent emailIntent = new Intent(Intent.ACTION_SEND);
-		emailIntent.setType("image/jpeg");
-		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email)});
-		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Panh'd!");
-		emailIntent.putExtra(Intent.EXTRA_TEXT, "Hey Aviad, check out my new Panh'd!");
-		emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(outputFileUri.toString()));
-		startActivityForResult(emailIntent, EMAIL_SENT);
+		try {
+			Intent emailIntent = new Intent(Intent.ACTION_SEND);
+			emailIntent.setType("image/jpeg");
+			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.email)});
+			emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Panh'd!");
+			emailIntent.putExtra(Intent.EXTRA_TEXT, "Hey Aviad, check out my new Panh'd!");
+			emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(outputFileUri.toString()));
+			startActivityForResult(emailIntent, EMAIL_SENT);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	protected static void showToast(String message){
@@ -374,5 +433,7 @@ public class Panhd extends Activity {
         boolean isFirstLaunch = preferences.getBoolean("isFirstLaunch", true);
         return isFirstLaunch;
     }
+	
+	
 	
 }

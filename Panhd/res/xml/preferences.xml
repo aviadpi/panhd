@@ -2,9 +2,9 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
   <PreferenceCategory
-                android:title="Preferences">
+                android:title="Panh'd options">
                 <CheckBoxPreference
-                        android:title="Start camera at startup"
+                        android:title="Start camera on startup"
                         android:defaultValue="true"
                         android:summary="Start the Camera automatically"
                         android:key="startcamera" />
@@ -16,13 +16,22 @@
                 <CheckBoxPreference
                         android:title="Send picture"
                         android:defaultValue="true"
-                        android:summary="Email the taken picture to me automatically "
+                        android:summary="E-mail the taken picture to me automatically "
                         android:key="sendpicture" />
+	     </PreferenceCategory>
+	     
+	<PreferenceCategory
+                android:title="Facebook">
                 <CheckBoxPreference
-                        android:title="Facebook log in"
+                        android:title="Log in on startup"
                         android:defaultValue="false"
                         android:summary="Log in to Facebook on startup"
                         android:key="facebooklogin" />
+                <CheckBoxPreference
+                        android:title="Force log in dialog"
+                        android:defaultValue="true"
+                        android:summary="Uncheck if you want to change Facebook users sometimes"
+                        android:key="facebookloginforce" />
                 <CheckBoxPreference
                         android:title="Wall post"
                         android:defaultValue="true"

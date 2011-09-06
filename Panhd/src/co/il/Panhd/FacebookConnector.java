@@ -121,7 +121,8 @@ public class FacebookConnector{
 	    	if (isLoggedIn){
 	    		showToast("You are already logged in to Facebook");
 	    	}else{
-	    		if (force){
+	    		final boolean facebookloginforce = preferences.getBoolean("facebookloginforce", true);
+	    		if (facebookloginforce){
 		    		   facebook.authorize(this.activity, PERMISSIONS, Facebook.FORCE_DIALOG_AUTH ,new LoginDialogListener());
 		    	   }else{
 		    		   facebook.authorize(this.activity, PERMISSIONS , new LoginDialogListener());
