@@ -65,10 +65,9 @@ public final class R {
         public static final int quickaction_slider_grip_left=0x7f020024;
         public static final int quickaction_slider_grip_right=0x7f020025;
         public static final int quickaction_top_frame=0x7f020026;
-        public static final int rock_background=0x7f020027;
-        public static final int splash11=0x7f020028;
-        public static final int textfield_default=0x7f020029;
-        public static final int transparent2=0x7f02002a;
+        public static final int splash122=0x7f020027;
+        public static final int textfield_default=0x7f020028;
+        public static final int transparent2=0x7f020029;
     }
     public static final class id {
         public static final int SPLimage1=0x7f090018;
@@ -92,8 +91,8 @@ public final class R {
         public static final int mainStartButton=0x7f09000f;
         public static final int mainlinearLayout1=0x7f09000e;
         public static final int mainrelativeLayout1=0x7f090010;
-        public static final int menualbum=0x7f09001a;
-        public static final int menupreferences=0x7f090019;
+        public static final int menualbum=0x7f090019;
+        public static final int menupreferences=0x7f09001a;
         public static final int scroll=0x7f090014;
         public static final int t_name=0x7f09000d;
         public static final int tracks=0x7f090015;

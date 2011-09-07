@@ -28,6 +28,7 @@ public class FacebookConnector{
 	private boolean isLoggedIn;
 	private SharedPreferences preferences;
 	private String messageToPost;
+	private LoginDialogListener LoginDialogListener;
 	
 	// Builder
 	public FacebookConnector(Activity activity, Context context){
@@ -35,8 +36,8 @@ public class FacebookConnector{
 		this.activity = activity;
 //		mAsyncRunner = new AsyncFacebookRunner(facebook);
 		restoreCredentials(facebook);
-		
-		facebook.authorize(this.activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH,new LoginDialogListener());
+		LoginDialogListener = new LoginDialogListener();
+		facebook.authorize(this.activity, PERMISSIONS,Facebook.FORCE_DIALOG_AUTH, LoginDialogListener);
 		
 		preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 		FacebookPost = preferences.getBoolean("wallpost", false);
@@ -123,9 +124,9 @@ public class FacebookConnector{
 	    	}else{
 	    		final boolean facebookloginforce = preferences.getBoolean("facebookloginforce", true);
 	    		if (facebookloginforce){
-		    		   facebook.authorize(this.activity, PERMISSIONS, Facebook.FORCE_DIALOG_AUTH ,new LoginDialogListener());
+		    		   facebook.authorize(this.activity, PERMISSIONS, Facebook.FORCE_DIALOG_AUTH ,LoginDialogListener);
 		    	   }else{
-		    		   facebook.authorize(this.activity, PERMISSIONS , new LoginDialogListener());
+		    		   facebook.authorize(this.activity, PERMISSIONS , LoginDialogListener);
 		    	   }
 	    	}
 	}
