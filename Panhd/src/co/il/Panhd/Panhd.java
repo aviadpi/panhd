@@ -43,6 +43,7 @@ public class Panhd extends Activity {
 	private static SharedPreferences preferences;
 	private static Activity activity;
 	private SubMenu fileMenu;
+	
 //	private WebView likewebview;
 //	private String likeURL;
 	
@@ -71,26 +72,11 @@ public class Panhd extends Activity {
 		setContentView(R.layout.main);
 
 		 // ** Starting the Camera, and calling the result with TAKE_PICTURE
-		final Thread camerathread = new Thread(){
-	           @Override
-	           public void run() {
-	        	   String fileName = "PanhdPicture.jpg";
-	        	   Intent cameraintent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	        	   File file = new File(Environment.getExternalStorageDirectory(), fileName);
-	        	   outputFileUri = Uri.fromFile(file);
-	        	   cameraintent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-	        	   try {
-					startActivityForResult(cameraintent, TAKE_PICTURE);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	           }
- 		};
-		
 		if (CameraBoolean){
-    		camerathread.start();
+			startCamera();
     	}
-	// ** End of Camera
+		
+		// ** End of Camera
 		
 		// ** About Button
 		ImageButton about = (ImageButton) this.findViewById(R.id.mainAboutButton);
@@ -160,7 +146,13 @@ public class Panhd extends Activity {
 		Button start = (Button) findViewById(R.id.mainStartButton);
 		start.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				camerathread.start();
+				try 
+				{
+					startCamera();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
 			}});
 		start.setMinHeight(Hpixels/4);
 		start.setMinWidth(Wpixels/2);
@@ -379,27 +371,52 @@ public class Panhd extends Activity {
 		
 		final boolean SendBoolean = preferences.getBoolean("sendpicture", true);
 		final boolean FacebookPost = preferences.getBoolean("wallpost", false);
-		
 		try {
-			if (requestCode == TAKE_PICTURE && SendBoolean){
-				sendPicture();
+			if (requestCode == TAKE_PICTURE && SendBoolean)
+			{
+				if (resultCode == RESULT_OK) 
+				{
+					sendPicture();
+				} else 
+				{
+					if (resultCode == RESULT_CANCELED) 
+					{
+						Toast.makeText(this, "Panh'ding cacelled", Toast.LENGTH_SHORT).show();
+					}
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		if(requestCode==EMAIL_SENT)
-	    {
-	        if(resultCode==Activity.RESULT_OK){
-	            Toast.makeText(this, "Mail sent", Toast.LENGTH_SHORT).show();
-	            if (FacebookPost){
-	            	postMessageInThread(getString(R.string.FbMailPost));
-	            }
-	        } else if (resultCode==Activity.RESULT_CANCELED){
-	            Toast.makeText(this, "Mail canceled", Toast.LENGTH_SHORT).show();
-	        }
-	    }
+		try {
+			if(requestCode==EMAIL_SENT)
+			{
+				Toast.makeText(this, "Mail probably sent, can't tell :)", Toast.LENGTH_SHORT).show();
+		        if (FacebookPost)
+		        {
+		        	postMessageInThread(getString(R.string.FbMailPost));
+		        }
+//			    if(resultCode == RESULT_OK)
+//			    {
+//			        Toast.makeText(this, "Mail sent", Toast.LENGTH_SHORT).show();
+//			        if (FacebookPost)
+//			        {
+//			        	postMessageInThread(getString(R.string.FbMailPost));
+//			        }
+//			    } else 
+//			    {
+//			    	if (resultCode == RESULT_CANCELED)
+//			    	{
+//			    		Toast.makeText(this, "Mail canceled", Toast.LENGTH_SHORT).show();
+//			    	}
+//			    }
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (facebookConnectorStarted) fbConnector.authorizeCallback(requestCode, resultCode, data);
 	}
@@ -417,6 +434,20 @@ public class Panhd extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private void startCamera(){
+ 	   String fileName = "PanhdPicture.jpg";
+ 	   Intent cameraintent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+ 	   File file = new File(Environment.getExternalStorageDirectory(), fileName);
+ 	   outputFileUri = Uri.fromFile(file);
+ 	   cameraintent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+ 	   try 
+ 	   {
+ 		   startActivityForResult(cameraintent, TAKE_PICTURE);
+ 	   } catch (Exception e) {
+			e.printStackTrace();
+ 	   }
 	}
 
 	protected static void showToast(String message){

@@ -22,7 +22,7 @@ public class FacebookConnector{
     private static final String EXPIRES = "expires_in";
     private static final String KEY = "facebook-credentials";
     private boolean FacebookPost;
-    private Facebook facebook = new Facebook("131326620295351");
+    private Facebook facebook = new Facebook("131326620295351"); 
 //    private AsyncFacebookRunner mAsyncRunner;
 	private Activity activity;
 	private boolean isLoggedIn;
