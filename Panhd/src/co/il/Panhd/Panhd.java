@@ -396,7 +396,7 @@ public class Panhd extends Activity {
 			if(requestCode==EMAIL_SENT)
 			{
 				// TODO These lines are called even if mail was cancelled.
-				Toast.makeText(this, "returned code " + resultCode, Toast.LENGTH_SHORT).show();
+//				Toast.makeText(this, "returned code " + resultCode, Toast.LENGTH_SHORT).show();
 //				Toast.makeText(this, "Mail probably sent, can't tell :)", Toast.LENGTH_SHORT).show();
 		        if (FacebookPost)
 		        {
