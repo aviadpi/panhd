@@ -5,7 +5,8 @@
     <string name="Panhd">Panhd</string>
     <string name="email">GotPanhd@gmail.com</string>
     <string name="myemail">Aviadpi@gmail.com</string>
-    <string name="camerabutton">  Take a picture and\nEmail it to me!</string>
+    <string name="camerabutton">  Panh\'d someone\n  and mail it to me!</string>
+    <string name="gallerybutton">  Or pick one from\nyour gallery</string>
     <string name="emailunderlined"><u>GotPanhd@gmail.com</u></string>
     <string name="aboutInstructions">To Panh\'d someone,\nAll you need to do is to picture him sleeping, and make a funny face.\nTry it!</string>
     <string name="abouttext">You Just Got Panh\'d!\n\nby: Aviad Panhi\n\nAll rights reserved\nbla bla bla...</string>
@@ -14,5 +15,5 @@
     <string name="FbfirstPost">Started using Panh\'d,\nI bet it\'s gonna be hilarious...</string>
     <string name="FbMailPost">Just sent Aviad a new Panh\'d,\nWanna check it out?</string>
     <string name="FbPostErrorLimit">{"error":{"type":"OAuthException","message":"(#341) Feed action request limit reached"}}</string>
-    <string name="FbMailPost">Error posting on wall, limit reached.</string>
+    <string name="FbMailPostError">Error posting on wall, limit reached.</string>
 </resources>

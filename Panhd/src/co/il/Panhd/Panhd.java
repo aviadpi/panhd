@@ -1,7 +1,6 @@
 package co.il.Panhd;
 
 import java.io.File;
-//import java.net.URLEncoder;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -29,13 +28,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-//import net.londatiga.android.*;
 
 
 public class Panhd extends Activity {
 
 	int TAKE_PICTURE = 235;
 	int EMAIL_SENT = 216;
+	int PICTURE_FROM_GALLERY = 317;
 	private Uri outputFileUri;
 	private static FacebookConnector fbConnector;
 	protected static Handler mFacebookHandler;
@@ -154,29 +153,32 @@ public class Panhd extends Activity {
 					e.printStackTrace();
 				} 
 			}});
-		start.setMinHeight(Hpixels/4);
+		start.setMinHeight(Hpixels/3);
 		start.setMinWidth(Wpixels/2);
 		// ** End of Camera Button
+		
+		// ** "Open gallery" Button
+		Button gallery = (Button) findViewById(R.id.mainGalleryButton);
+		gallery.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				try 
+				{
+					Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT);  
+					galleryintent.setType("image/*");
+					startActivityForResult(galleryintent, PICTURE_FROM_GALLERY);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}});
+		gallery.setMinHeight(Hpixels/4);
+		gallery.setMinWidth(Wpixels/2);
+		// ** End of gallery Button
 		
 		if (FacebookBoolean){
 			fbConnector = new FacebookConnector(this, getBaseContext());
 			facebookConnectorStarted = true;
 		}
-		
-//		likewebview = (WebView) findViewById(R.id.likewebview);
-//		likewebview.getSettings().setJavaScriptEnabled(true);
-//		likewebview.setWebViewClient(new HelloWebViewClient());
-//        
-//        likeURL ="http://www.facebook.com/plugins/like.php?" +
-//        "href=" + URLEncoder.encode( "http://developers.facebook.com/docs/opengraph/" )
-//        + "&" +
-//        "layout=button_count&" +
-//        "show_faces=0&" +
-//        "width=90&" +
-//        "height=24&" +
-//        "locale=en_IN" +
-//        "colorscheme=light" ;
-
 		
 	}
 
@@ -207,7 +209,7 @@ public class Panhd extends Activity {
 	    fileMenu.add(FacebookConst, POST, 2, "Post something");
 //	    fileMenu.add(FacebookConst, LIKE, 3, "Like my album");
 	    fileMenu.setIcon(R.drawable.facebookicon72);
-	    
+
 	    modifySubMenu();
 		
 	    MenuInflater inflater = getMenuInflater();
@@ -381,7 +383,7 @@ public class Panhd extends Activity {
 				{
 					if (resultCode == RESULT_CANCELED) 
 					{
-						Toast.makeText(this, "Panh'ding cacelled", Toast.LENGTH_SHORT).show();
+						Toast.makeText(this, "Panh'ding cancelled", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
@@ -393,25 +395,38 @@ public class Panhd extends Activity {
 		try {
 			if(requestCode==EMAIL_SENT)
 			{
-				Toast.makeText(this, "Mail probably sent, can't tell :)", Toast.LENGTH_SHORT).show();
+				// TODO These lines are called even if mail was cancelled.
+				Toast.makeText(this, "returned code " + resultCode, Toast.LENGTH_SHORT).show();
+//				Toast.makeText(this, "Mail probably sent, can't tell :)", Toast.LENGTH_SHORT).show();
 		        if (FacebookPost)
 		        {
 		        	postMessageInThread(getString(R.string.FbMailPost));
 		        }
-//			    if(resultCode == RESULT_OK)
-//			    {
-//			        Toast.makeText(this, "Mail sent", Toast.LENGTH_SHORT).show();
-//			        if (FacebookPost)
-//			        {
-//			        	postMessageInThread(getString(R.string.FbMailPost));
-//			        }
-//			    } else 
-//			    {
-//			    	if (resultCode == RESULT_CANCELED)
-//			    	{
-//			    		Toast.makeText(this, "Mail canceled", Toast.LENGTH_SHORT).show();
-//			    	}
-//			    }
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			if(requestCode==PICTURE_FROM_GALLERY)
+			{
+				try {
+					if (resultCode == RESULT_OK) 
+					{
+						outputFileUri = data.getData();
+						sendPicture();
+					} else 
+					{
+						if (resultCode == RESULT_CANCELED) 
+						{
+//							Toast.makeText(this, "Couldn't find one?\nHow about taking a new one?", Toast.LENGTH_LONG).show();
+						}
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

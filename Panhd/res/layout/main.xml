@@ -11,23 +11,45 @@
 	    	android:layout_height="fill_parent" 
 	    	android:layout_width="wrap_content"
 	    	android:layout_gravity="center"
+	    	android:orientation="vertical"
 	    	android:paddingBottom="20dp"
 	    	android:paddingTop="100dp"
-	    	android:layout_weight="1"
+	    	android:layout_weight="0.5"
 	    	>
+	        
 	        
 	        <Button 
 	        	android:layout_height="wrap_content" 
 	        	android:text="@string/camerabutton" 
 	        	android:textSize="15dp" 
-	        	android:layout_weight="1"
+	        	android:textColor="#ddffffff" 
+	        	android:layout_weight="0.08"
 	        	android:layout_width="wrap_content" 
 	        	android:drawableLeft="@drawable/camera" 
 	        	android:id="@+id/mainStartButton" 
 	        	android:typeface="serif" 
 	        	android:layout_gravity="center|bottom"
+	        	android:padding="15dp"
+	        	android:layout_marginBottom="15dp"
+	        	android:background="@drawable/background" 
 	        	></Button>
 	        	
+	        <Button
+	            android:id="@+id/mainGalleryButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center|bottom"
+	            android:layout_weight="0.08"
+	            android:background="@drawable/background"
+	            android:drawableLeft="@drawable/gallery48"
+	            android:padding="15dp"
+	            android:text="@string/gallerybutton"
+	            android:textColor="#ddffffff"
+	            android:textSize="15dp"
+	            android:typeface="serif" >
+</Button>
+	            
+	            
 	    </LinearLayout>
 	   <!--  
 	<LinearLayout 

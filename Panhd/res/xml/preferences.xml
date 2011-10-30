@@ -30,7 +30,7 @@
                 <CheckBoxPreference
                         android:title="Force log in dialog"
                         android:defaultValue="true"
-                        android:summary="Uncheck if you want to change Facebook users sometimes"
+                        android:summary="Check if you want to change Facebook users sometimes"
                         android:key="facebookloginforce" />
                 <CheckBoxPreference
                         android:title="Wall post"
