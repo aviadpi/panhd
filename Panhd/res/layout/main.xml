@@ -1,57 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background = "@drawable/background2" 
-    >
-		    
-	    <LinearLayout 
-	    	android:id="@+id/mainlinearLayout1" 
-	    	android:layout_height="fill_parent" 
-	    	android:layout_width="wrap_content"
-	    	android:layout_gravity="center"
-	    	android:orientation="vertical"
-	    	android:paddingBottom="20dp"
-	    	android:paddingTop="100dp"
-	    	android:layout_weight="0.5"
-	    	>
-	        
-	        
-	        <Button 
-	        	android:layout_height="wrap_content" 
-	        	android:text="@string/camerabutton" 
-	        	android:textSize="15dp" 
-	        	android:textColor="#ddffffff" 
-	        	android:layout_weight="0.08"
-	        	android:layout_width="wrap_content" 
-	        	android:drawableLeft="@drawable/camera" 
-	        	android:id="@+id/mainStartButton" 
-	        	android:typeface="serif" 
-	        	android:layout_gravity="center|bottom"
-	        	android:padding="15dp"
-	        	android:layout_marginBottom="15dp"
-	        	android:background="@drawable/background" 
-	        	></Button>
-	        	
-	        <Button
-	            android:id="@+id/mainGalleryButton"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_gravity="center|bottom"
-	            android:layout_weight="0.08"
-	            android:background="@drawable/background"
-	            android:drawableLeft="@drawable/gallery48"
-	            android:padding="15dp"
-	            android:text="@string/gallerybutton"
-	            android:textColor="#ddffffff"
-	            android:textSize="15dp"
-	            android:typeface="serif" >
-</Button>
-	            
-	            
-	    </LinearLayout>
-	   <!--  
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background2"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/mainlinearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1.32"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingTop="110dp" >
+
+        <Button
+            android:id="@+id/mainStartButton"
+            android:layout_width="wrap_content"
+            android:layout_height="105dp"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="0.00"
+            android:background="@drawable/film2s"
+            android:drawableLeft="@drawable/camera"
+            android:padding="5dp"
+            android:text="@string/camerabutton"
+            android:textColor="#ddffffff"
+            android:textSize="15dp"
+            android:typeface="serif" >
+        </Button>
+
+        <Button
+            android:id="@+id/mainGalleryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:background="@drawable/background"
+            android:drawableRight="@drawable/gallery48"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/gallerybutton"
+            android:textColor="#ddffffff"
+            android:textSize="13dp"
+            android:typeface="serif" >
+        </Button>
+    </LinearLayout>
+
+    <!--
+    android:drawableRight="@drawable/gallery48"
 	<LinearLayout 
 			android:layout_height="wrap_content" 
 			android:layout_width="wrap_content" 
@@ -87,25 +84,27 @@
 				android:layout_width="fill_parent" 
 				></Button>
 		</LinearLayout>
-		-->
-	<RelativeLayout 
-		android:layout_height="wrap_content" 
-		android:layout_width="match_parent" 
-		android:id="@+id/mainrelativeLayout1"
-		android:layout_gravity="bottom"
-		android:layout_weight="1"
-		>
-		<ImageButton 
-			android:paddingRight="10dp" 
-			android:background="@drawable/transparent2" 
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content" 
-			android:id="@+id/mainAboutButton" 
-			android:src="@drawable/infobutton2" 
-			android:padding="50dp" 
-			android:layout_alignParentBottom="true"
-			android:layout_alignParentRight="true"
-			></ImageButton>
-	</RelativeLayout>
-</LinearLayout>
-     
+    -->
+
+    <RelativeLayout
+        android:id="@+id/mainrelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_gravity="bottom"
+        android:layout_weight="0.67" >
+
+        <ImageButton
+            android:id="@+id/mainAboutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/transparent2"
+            android:padding="40dp"
+            android:paddingBottom="60dp"
+            android:src="@drawable/infobutton2" >
+        </ImageButton>
+    </RelativeLayout>
+
+</LinearLayout>     

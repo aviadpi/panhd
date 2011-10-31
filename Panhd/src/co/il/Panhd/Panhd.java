@@ -153,7 +153,7 @@ public class Panhd extends Activity {
 					e.printStackTrace();
 				} 
 			}});
-		start.setMinHeight(Hpixels/3);
+		start.setMinHeight(Hpixels/4);
 		start.setMinWidth(Wpixels/2);
 		// ** End of Camera Button
 		
@@ -171,7 +171,7 @@ public class Panhd extends Activity {
 					e.printStackTrace();
 				} 
 			}});
-		gallery.setMinHeight(Hpixels/4);
+//		gallery.setMinHeight(Hpixels/5);
 		gallery.setMinWidth(Wpixels/2);
 		// ** End of gallery Button
 		
