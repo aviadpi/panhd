@@ -1,0 +1,1 @@
+Catch someone sleeping, make a funny face, take a picture, send it to me, and enjoy everlasting fame.
